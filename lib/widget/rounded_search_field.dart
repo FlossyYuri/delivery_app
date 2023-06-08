@@ -13,7 +13,7 @@ class RoundedSearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFieldContainer(
       child: TextField(
-        obscureText: true,
+        obscureText: false,
         onChanged: onChanged,
         cursorColor: kPrimaryColor,
         decoration: const InputDecoration(
@@ -21,7 +21,7 @@ class RoundedSearchField extends StatelessWidget {
           icon: Icon(
             Icons.search,
             color: kPrimaryColor,
-          ),          
+          ),
           border: InputBorder.none,
         ),
       ),
