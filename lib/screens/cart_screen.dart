@@ -1,3 +1,4 @@
+import 'package:delivery_app/screens/delivery_screen.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:delivery_app/widget/rounded_search_field.dart';
@@ -19,29 +20,27 @@ class _Cart_screenState extends State<Cart_screen> {
     return Scaffold(
       backgroundColor: HexColor("#F5F5F8"),
       appBar: AppBar(
-        
         centerTitle: true,
         iconTheme: IconThemeData(
-          color: Colors.black, 
+          color: Colors.black,
         ),
         backgroundColor: HexColor("#F5F5F8"),
         elevation: 0.0,
         bottomOpacity: 0.0,
         title: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                      text: "Carrinho",
-                      style: TextStyle(fontSize: 20,color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: '\nswipe on an item to delete',
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                      ]
+          textAlign: TextAlign.center,
+          text: TextSpan(
+              text: "Carrinho",
+              style: TextStyle(fontSize: 20, color: Colors.black),
+              children: <TextSpan>[
+                TextSpan(
+                  text: '\nswipe on an item to delete',
+                  style: TextStyle(
+                    fontSize: 12,
                   ),
                 ),
+              ]),
+        ),
         toolbarHeight: 90,
       ),
       body: Center(
@@ -236,7 +235,13 @@ class _Cart_screenState extends State<Cart_screen> {
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.deepOrange),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Delivery_Screen()),
+                            );
+                          },
                           child: Text(
                             "Completar encomenda",
                             style: TextStyle(color: Colors.white),
