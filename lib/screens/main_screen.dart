@@ -1,4 +1,5 @@
 import 'package:delivery_app/model/place.dart';
+import 'package:delivery_app/screens/cart_screen.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter/material.dart';
@@ -138,7 +139,11 @@ class _Main_ScreenState extends State<Main_Screen> {
   );;
         if (value == 2) Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => FavouriteScreen()),
+    MaterialPageRoute(builder: (context) => Cart_screen()),
+  );;
+  if (value == 3) Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => Cart_screen()),
   );;
       },),
     );

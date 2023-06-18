@@ -19,33 +19,29 @@ class _Cart_screenState extends State<Cart_screen> {
     return Scaffold(
       backgroundColor: HexColor("#F5F5F8"),
       appBar: AppBar(
+        
+        centerTitle: true,
         iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
+          color: Colors.black, 
         ),
         backgroundColor: HexColor("#F5F5F8"),
         elevation: 0.0,
         bottomOpacity: 0.0,
-        title: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 38,
-            ),
-            Text(
-              "Carrinho",
-              style: TextStyle(color: Colors.black, fontSize: 18.0),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Text(
-              "swipe on an item to delete",
-              style: TextStyle(color: Colors.black, fontSize: 12.0),
-            )
-          ],
-        )),
+        title: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                      text: "Carrinho",
+                      style: TextStyle(fontSize: 20,color: Colors.black),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: '\nswipe on an item to delete',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                      ]
+                  ),
+                ),
         toolbarHeight: 90,
       ),
       body: Center(
@@ -238,10 +234,13 @@ class _Cart_screenState extends State<Cart_screen> {
                         color: Colors.black,
                       ),
                       ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.deepOrange
-                        ),
-                          onPressed: () {}, child: Text("Completar encomenda",style: TextStyle(color: Colors.white),))
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.deepOrange),
+                          onPressed: () {},
+                          child: Text(
+                            "Completar encomenda",
+                            style: TextStyle(color: Colors.white),
+                          ))
                     ],
                   ),
                 ))

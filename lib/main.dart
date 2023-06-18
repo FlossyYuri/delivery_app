@@ -1,4 +1,3 @@
-import 'package:delivery_app/screens/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:delivery_app/screens/main_screen.dart';
 import 'package:delivery_app/screens/home_page.dart';
@@ -19,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(      
         primarySwatch: Colors.orange  ,
       ),
-      home: Cart_screen(),
+      home: Main_Screen(),
     );
   }
 }
