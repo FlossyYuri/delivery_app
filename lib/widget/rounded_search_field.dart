@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:delivery_app/widget/text_field.dart';
-import 'package:delivery_app/constants.dart';
+import 'package:ergo_delivery/widget/text_field.dart';
+import 'package:ergo_delivery/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class RoundedSearchField extends StatelessWidget {

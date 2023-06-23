@@ -1,4 +1,4 @@
-import 'package:delivery_app/screens/delivery_screen.dart';
+import 'package:ergo_delivery/screens/delivery_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 

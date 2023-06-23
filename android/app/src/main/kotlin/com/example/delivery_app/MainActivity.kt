@@ -1,4 +1,4 @@
-package com.example.delivery_app
+package com.flossyyuri.ergo_delivery
 
 import io.flutter.embedding.android.FlutterActivity
 

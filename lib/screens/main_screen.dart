@@ -1,9 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:delivery_app/model/place.dart';
-import 'package:delivery_app/screens/cart_screen.dart';
-import 'package:delivery_app/screens/favourite_screen.dart';
-import 'package:delivery_app/widget/local_card.dart';
-import 'package:delivery_app/widget/rounded_search_field.dart';
+import 'package:ergo_delivery/model/place.dart';
+import 'package:ergo_delivery/screens/Client/vendor_screen.dart';
+import 'package:ergo_delivery/screens/cart_screen.dart';
+import 'package:ergo_delivery/screens/favourite_screen.dart';
+import 'package:ergo_delivery/widget/local_card.dart';
+import 'package:ergo_delivery/widget/rounded_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -47,120 +48,145 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         child: SafeArea(
           child: Container(
             color: HexColor("#F2F2F2"),
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: HexColor("#FF6339"),
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.elliptical(
-                          MediaQuery.of(context).size.width, 70.0),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: HexColor("#FF6339"),
+                      borderRadius: BorderRadius.vertical(
+                        bottom: Radius.elliptical(
+                            MediaQuery.of(context).size.width, 70.0),
+                      ),
+                    ),
+                    child: Column(children: [
+                      const SizedBox(height: 32),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/icons/Oval.svg',
+                                    ),
+                                    const SizedBox(width: 12),
+                                    const Text(
+                                      'Entregar Para: Casa',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            RoundedSearchField(onChanged: (value) {}),
+                            const SizedBox(height: 12),
+                            TabBar(
+                              controller: _tabController,
+                              indicatorColor: Colors.white,
+                              indicatorSize: TabBarIndicatorSize.label,
+                              tabs: [
+                                _buildTabItem('assets/icons/cocktail.svg',
+                                    'Restaurantes', activeTabIndex, 0),
+                                _buildTabItem('assets/icons/bag.svg',
+                                    'Vestuário', activeTabIndex, 1),
+                                _buildTabItem('assets/icons/laptop.svg',
+                                    'Tecnologia', activeTabIndex, 2),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 32,
+                            )
+                          ],
+                        ),
+                      )
+                    ]),
+                  ),
+                  // TabBarView(
+                  //   children: [
+                  //     // Content of Tab 1
+                  //     Center(child: Text('Tab 1 Content')),
+
+                  //     // Content of Tab 2
+                  //     Center(child: Text('Tab 2 Content')),
+
+                  //     // Content of Tab 3
+                  //     Center(child: Text('Tab 3 Content')),
+                  //   ],
+                  // ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Melhor Avaliação",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        //LocalCardView(place: Place(1, "name", 1, 1, 1))
+                        CarouselSlider(
+                          options: CarouselOptions(
+                            viewportFraction: 0.8,
+                            enableInfiniteScroll: false,
+                            disableCenter: true,
+                            padEnds: false,
+                            reverse: false,
+                          ),
+                          items: [1, 2, 3, 4, 5].map((i) {
+                            return Builder(
+                              builder: (BuildContext context) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const VendorScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(8)),
+                                    margin: const EdgeInsets.only(right: 12),
+                                    child: LocalCardView(
+                                      place: Place(
+                                        1,
+                                        "Frango Panado - Batata",
+                                        1,
+                                        1,
+                                        1,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }).toList(),
+                        )
+                      ],
                     ),
                   ),
-                  child: Column(children: [
-                    const SizedBox(height: 32),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                'assets/icons/Oval.svg',
-                              ),
-                              const SizedBox(width: 12),
-                              const Text(
-                                'Entregar Para: Casa',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          RoundedSearchField(onChanged: (value) {}),
-                          const SizedBox(height: 12),
-                          TabBar(
-                            controller: _tabController,
-                            indicatorColor: Colors.white,
-                            indicatorSize: TabBarIndicatorSize.label,
-                            tabs: [
-                              _buildTabItem('assets/icons/cocktail.svg',
-                                  'Restaurantes', activeTabIndex, 0),
-                              _buildTabItem('assets/icons/bag.svg', 'Vestuário',
-                                  activeTabIndex, 1),
-                              _buildTabItem('assets/icons/laptop.svg',
-                                  'Tecnologia', activeTabIndex, 2),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 32,
-                          )
-                        ],
-                      ),
-                    )
-                  ]),
-                ),
-                // TabBarView(
-                //   children: [
-                //     // Content of Tab 1
-                //     Center(child: Text('Tab 1 Content')),
-
-                //     // Content of Tab 2
-                //     Center(child: Text('Tab 2 Content')),
-
-                //     // Content of Tab 3
-                //     Center(child: Text('Tab 3 Content')),
-                //   ],
-                // ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Melhor Avaliação",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      //LocalCardView(place: Place(1, "name", 1, 1, 1))
-                      CarouselSlider(
-                        options: CarouselOptions(
-                          viewportFraction: 0.8,
-                          enableInfiniteScroll: false,
-                          disableCenter: true,
-                          padEnds: false,
-                          reverse: false,
-                        ),
-                        items: [1, 2, 3, 4, 5].map((i) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              return Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(8)),
-                                margin: const EdgeInsets.only(right: 12),
-                                child: LocalCardView(
-                                  place: Place(
-                                    1,
-                                    "Frango Panado - Batata",
-                                    1,
-                                    1,
-                                    1,
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        }).toList(),
-                      )
-                    ],
+                  const SizedBox(
+                    height: 24,
                   ),
-                )
-              ],
+                  Image.asset('assets/images/banner.png'),
+                  const SizedBox(
+                    height: 48,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

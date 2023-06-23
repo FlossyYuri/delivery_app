@@ -1,4 +1,4 @@
-import 'package:delivery_app/screens/main_screen.dart';
+import 'package:ergo_delivery/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
