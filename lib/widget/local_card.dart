@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:delivery_app/model/place.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LocalCardView extends StatelessWidget {
   const LocalCardView(
@@ -19,72 +20,65 @@ class LocalCardView extends StatelessWidget {
     final crossedValue = "";
     return GestureDetector(
       onTap: () => () {},
-      child: SizedBox(
-        width: 200,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Stack(
-            alignment: AlignmentDirectional.bottomStart,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(6),
-                child: SizedBox(
-                    height: 120,
-                    width: MediaQuery.of(context).size.width,
-                    child: Image.asset("assets/images/kfc.jpg",
-                        alignment: imageAlignment, fit: BoxFit.cover)),
+      child: Container(
+        width: 180,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          Container(
+            height: 140,
+            padding: EdgeInsets.all(8),
+            child: Container(
+              clipBehavior: Clip.hardEdge,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+              child: Image.asset(
+                "assets/images/kfc.jpg",
+                alignment: imageAlignment,
+                fit: BoxFit.cover,
               ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: EdgeInsets.only(left: 8),
-            child: Column(
-              children: [
-                Row(mainAxisAlignment: MainAxisAlignment.center,children: [SizedBox(
-                    child: Text('KFC',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        style: TextStyle(fontWeight: FontWeight.bold)))],),
-                SizedBox(
-                    child: Text('${place.name}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        style: Theme.of(context).textTheme.bodyText2)),
-              ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2.0),
-            //child: ColorIndicatorView(place: place),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('$placeValue',
-                  maxLines: 1,
-                  overflow: TextOverflow.clip,
-                  softWrap: false,
-                  style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                      fontWeight: FontWeight.bold, color: Colors.amber)),
-              if (crossedValue != null)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text('$crossedValue',
-                      maxLines: 1,
-                      overflow: TextOverflow.clip,
-                      softWrap: false,
-                      style: Theme.of(context)
-                          .textTheme
-                          .caption
-                          ?.copyWith(decoration: TextDecoration.lineThrough)),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8,
+            ),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text(
+                'KFC',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Text(
+                '${place.name}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
+                style: TextStyle(
+                  color: Colors.grey.shade500,
                 ),
-            ],
-          ),
-          // RatingView(
-          //     value: place.reviews?.rating?.toInt() ?? 0,
-          //     reviewsCount: place.reviews?.count?.toInt() ?? 0),
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Row(
+                children: [
+                  SvgPicture.asset('assets/icons/star.svg'),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  const Text(
+                    "4.0 (2)",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+            ]),
+          )
         ]),
       ),
     );

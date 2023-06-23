@@ -12,7 +12,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: HexColor("#FF6339"),
-        title: Text(
+        title: const Text(
           'Locais Favoritos',
           style: TextStyle(color: Colors.white),
         ),
@@ -23,14 +23,14 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               "",
               style: TextStyle(
                   fontStyle: FontStyle.italic,
                   letterSpacing: 0.4,
                   fontWeight: FontWeight.w600),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             ElevatedButton(
@@ -42,7 +42,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
               onPressed: () {
                 showModalBottomSheet(
                     context: context,
-                    shape: RoundedRectangleBorder(
+                    shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(20),
                       ),
@@ -52,7 +52,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Padding(
@@ -67,7 +67,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                               ),
                             ],
                           ),
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Padding(
@@ -82,7 +82,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                               ),
                             ],
                           ),
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Padding(
@@ -113,7 +113,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                             ],
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 10.0, horizontal: 20.0),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
@@ -126,11 +126,11 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                       color: Colors.red,
                                       width: 70,
                                       height: 70,
-                                      child:
-                                          Icon(Icons.cake, color: Colors.white),
+                                      child: const Icon(Icons.cake,
+                                          color: Colors.white),
                                     ),
-                                    SizedBox(width: 10),
-                                    Expanded(
+                                    const SizedBox(width: 10),
+                                    const Expanded(
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -144,14 +144,13 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                         ],
                                       ),
                                     ),
-                                    
                                   ],
                                 ),
                               ),
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 10.0, horizontal: 20.0),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
@@ -164,11 +163,11 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                       color: Colors.red,
                                       width: 70,
                                       height: 70,
-                                      child:
-                                          Icon(Icons.spoke, color: Colors.white),
+                                      child: const Icon(Icons.spoke,
+                                          color: Colors.white),
                                     ),
-                                    SizedBox(width: 10),
-                                    Expanded(
+                                    const SizedBox(width: 10),
+                                    const Expanded(
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -182,14 +181,14 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                         ],
                                       ),
                                     ),
-                                    
                                   ],
                                 ),
                               ),
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 10,bottom: 40,left: 20,right: 20),
+                            padding: EdgeInsets.only(
+                                top: 10, bottom: 40, left: 20, right: 20),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Container(
@@ -201,11 +200,11 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                       color: Colors.red,
                                       width: 70,
                                       height: 70,
-                                      child:
-                                          Icon(Icons.food_bank, color: Colors.white),
+                                      child: const Icon(Icons.food_bank,
+                                          color: Colors.white),
                                     ),
-                                    SizedBox(width: 10),
-                                    Expanded(
+                                    const SizedBox(width: 10),
+                                    const Expanded(
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -219,7 +218,6 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                         ],
                                       ),
                                     ),
-                                    
                                   ],
                                 ),
                               ),
@@ -258,12 +256,13 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                     });
               },
 
-              child: Text(
+              child: const Text(
                 'Clique aqui para ver os detalhes',
                 style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.6),
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.6,
+                ),
               ),
             ),
           ],

@@ -1,9 +1,6 @@
 import 'package:delivery_app/screens/delivery_screen.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:delivery_app/widget/rounded_search_field.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class Cart_screen extends StatefulWidget {
   const Cart_screen({super.key});
@@ -129,8 +126,8 @@ class _Cart_screenState extends State<Cart_screen> {
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(5),
-                                              color: Theme.of(context)
-                                                  .accentColor),
+                                              color:
+                                                  Theme.of(context).hintColor),
                                           child: Row(
                                             children: [
                                               InkWell(

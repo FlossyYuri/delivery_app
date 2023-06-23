@@ -1,7 +1,5 @@
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class Delivery_Screen extends StatefulWidget {
   const Delivery_Screen({super.key});

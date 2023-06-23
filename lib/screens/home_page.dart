@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatelessWidget {
+  const MyHomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: ListView.builder(
         itemCount: 1,
-        padding: EdgeInsets.symmetric(vertical: 16.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
         itemBuilder: (BuildContext context, int index) {
-          
-          if(index % 2 == 0) {
+          if (index % 2 == 0) {
             return _buildCarousel(context, index ~/ 2);
-          }
-          else {
-            return Divider();
+          } else {
+            return const Divider();
           }
         },
       ),
@@ -41,11 +40,12 @@ class MyHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildCarouselItem(BuildContext context, int carouselIndex, int itemIndex) {
+  Widget _buildCarouselItem(
+      BuildContext context, int carouselIndex, int itemIndex) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.grey,
           borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),
