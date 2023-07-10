@@ -4,6 +4,7 @@ import 'package:ergo_delivery/widget/common/app_button.dart';
 import 'package:ergo_delivery/widget/common/form/CustomTextInput.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ergo_delivery/utils/form_validation_api.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -16,7 +17,6 @@ class _LoginFormState extends State<LoginForm> {
   final AuthStoreController authStoreController =
       Get.put(AuthStoreController());
   final _formKey = GlobalKey<FormState>();
-  bool isLoading = false;
   final Map<String, dynamic> _formValues = {
     'email': '',
     'password': '',
@@ -25,12 +25,6 @@ class _LoginFormState extends State<LoginForm> {
   setFieldValue(field, value) {
     setState(() {
       _formValues[field] = value;
-    });
-  }
-
-  updateLoader(bool value) {
-    setState(() {
-      isLoading = value;
     });
   }
 
@@ -45,6 +39,11 @@ class _LoginFormState extends State<LoginForm> {
             name: 'email',
             label: 'Email',
             placeholder: 'nome@exemplo.com',
+            validator: (val) {
+              if (!val!.isValidEmail) {
+                return 'Email inválido, escreva novamente';
+              }
+            },
           ),
           const SizedBox(height: 24),
           CustomTextInput(
@@ -52,37 +51,46 @@ class _LoginFormState extends State<LoginForm> {
             name: 'password',
             label: 'Senha',
             placeholder: '******',
+            validator: (val) {
+              if (!val!.isValidPassword) {
+                print(val);
+                return 'Senha inválida, tente novamente';
+              }
+            },
           ),
           const SizedBox(height: 24),
-          AppButton(
-            label: "Entrar",
-            isLoading: isLoading,
-            onClick: () async {
-              updateLoader(true);
-              if (!_formKey.currentState!.validate()) {
-                return;
-              }
-              _formKey.currentState!.save();
-              var response = await postRequest('auth/login', _formValues);
-              if (response['statusCode'] >= 200 &&
-                  response['statusCode'] < 300) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Login Realizado com sucesso'),
-                  ),
-                );
-                authStoreController.login(response['jsonResponse']);
-                Navigator.of(context).pushReplacementNamed('/home');
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                        'Não foi possível fazer o login, verifique suas  credenciais!'),
-                  ),
-                );
-              }
-              updateLoader(false);
-            },
+          Obx(
+            () => AppButton(
+              label: "Entrar",
+              isLoading: authStoreController.isLoading.value,
+              onClick: () async {
+                authStoreController.updateLoader(true);
+                if (!_formKey.currentState!.validate()) {
+                  authStoreController.updateLoader(false);
+                  return;
+                }
+                _formKey.currentState!.save();
+                var response = await postRequest('auth/login', _formValues);
+                authStoreController.updateLoader(false);
+                if (response['statusCode'] >= 200 &&
+                    response['statusCode'] < 300) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Login Realizado com sucesso'),
+                    ),
+                  );
+                  authStoreController.login(response['jsonResponse']);
+                  Navigator.of(context).pushReplacementNamed('/home');
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                          'Não foi possível fazer o login, verifique suas  credenciais!'),
+                    ),
+                  );
+                }
+              },
+            ),
           ),
           const SizedBox(height: 24),
         ],

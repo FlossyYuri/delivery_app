@@ -1,5 +1,6 @@
 import 'package:ergo_delivery/services/auth.dart';
 import 'package:ergo_delivery/store/auth_store_controller.dart';
+import 'package:ergo_delivery/utils/form_validation_api.dart';
 import 'package:ergo_delivery/widget/common/app_button.dart';
 import 'package:ergo_delivery/widget/common/form/CustomTextInput.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
   };
   final AuthStoreController authStoreController =
       Get.find<AuthStoreController>();
+  final passwordController = TextEditingController();
 
   setFieldValue(field, value) {
     setState(() {
@@ -46,6 +48,11 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             name: 'fullName',
             label: 'Nome Completo',
             placeholder: 'Nome Completo',
+            validator: (val) {
+              if (!val!.isValidName) {
+                return 'Nome inválido';
+              }
+            },
           ),
           const SizedBox(height: 24),
           CustomTextInput(
@@ -53,6 +60,11 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             name: 'phone',
             label: 'Telefone',
             placeholder: '8* *** ****',
+            validator: (val) {
+              if (!val!.isValidPhone) {
+                return 'Número inválido';
+              }
+            },
           ),
           const SizedBox(height: 24),
           CustomTextInput(
@@ -60,6 +72,11 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             name: 'email',
             label: 'Email',
             placeholder: 'nome@exemplo.com',
+            validator: (val) {
+              if (!val!.isValidEmail) {
+                return 'Email inválido, escreva novamente';
+              }
+            },
           ),
           const SizedBox(height: 24),
           CustomTextInput(
@@ -67,6 +84,12 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             name: 'password',
             label: 'Senha',
             placeholder: '******',
+            textController: passwordController,
+            validator: (val) {
+              if (!val!.isValidPassword) {
+                return 'Senha fraca, tente outra';
+              }
+            },
           ),
           const SizedBox(height: 24),
           CustomTextInput(
@@ -74,38 +97,54 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             name: 'confirmPassword',
             label: 'Confirmar Senha',
             placeholder: '******',
+            validator: (val) {
+              if (val != passwordController.text) {
+                return 'Senha inválida, digite a mesma senha';
+              }
+              // if (val != _formValues['password']) {
+              //   return 'Senha inválida, digite a mesma senha';
+              // }
+            },
           ),
           const SizedBox(height: 24),
-          AppButton(
-            label: "Criar conta",
-            onClick: () async {
-              if (!_formKey.currentState!.validate()) {
-                return;
-              }
-              _formKey.currentState!.save();
-              if (widget.activeTabIndex == 0) {
-                _formValues['role'] = 'CLIENT';
-              } else {
-                _formValues['role'] = 'DRIVER';
-              }
-              var response = await postRequest('auth/signup', _formValues);
-              if (response['statusCode'] >= 200 &&
-                  response['statusCode'] < 300) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Conta criada com sucesso!'),
-                  ),
-                );
-                authStoreController.login(response['jsonResponse']);
-                Navigator.of(context).pushReplacementNamed('/home');
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Erro ao criar conta! Tente novamente mais'),
-                  ),
-                );
-              }
-            },
+          Obx(
+            () => AppButton(
+              label: "Criar conta",
+              isLoading: authStoreController.isLoading.value,
+              onClick: () async {
+                authStoreController.updateLoader(true);
+                print('in validation');
+                if (!_formKey.currentState!.validate()) {
+                  authStoreController.updateLoader(false);
+                  return;
+                }
+                _formKey.currentState!.save();
+                if (widget.activeTabIndex == 0) {
+                  _formValues['role'] = 'CLIENT';
+                } else {
+                  _formValues['role'] = 'DRIVER';
+                }
+                var response = await postRequest('auth/signup', _formValues);
+                authStoreController.updateLoader(false);
+                if (response['statusCode'] >= 200 &&
+                    response['statusCode'] < 300) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Conta criada com sucesso!'),
+                    ),
+                  );
+                  authStoreController.login(response['jsonResponse']);
+                  Navigator.of(context).pushReplacementNamed('/home');
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content:
+                          Text('Erro ao criar conta! Tente novamente mais'),
+                    ),
+                  );
+                }
+              },
+            ),
           ),
           const SizedBox(height: 24),
         ],
