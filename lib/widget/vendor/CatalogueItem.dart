@@ -9,8 +9,7 @@ class CatalogueItem extends StatefulWidget {
 }
 
 class _CatalogueItemState extends State<CatalogueItem> {
-  final items = List<String>.generate(20, (i) => 'Item ${i + 1}');
-  int varQuant = 1;
+  int varQuant = 0;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,6 +21,7 @@ class _CatalogueItemState extends State<CatalogueItem> {
       child: Row(
         children: <Widget>[
           Container(
+            clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               color: Colors.grey,
               borderRadius: BorderRadius.circular(8),
@@ -29,7 +29,10 @@ class _CatalogueItemState extends State<CatalogueItem> {
             margin: const EdgeInsets.only(right: 12),
             width: 80,
             height: 80,
-            child: Image.asset('assets/images/kfc.jpg'),
+            child: Image.asset(
+              'assets/images/kfc.jpg',
+              fit: BoxFit.cover,
+            ),
           ),
           Expanded(
             child: Column(
@@ -80,7 +83,7 @@ class _CatalogueItemState extends State<CatalogueItem> {
                               InkWell(
                                 onTap: () {
                                   setState(() {
-                                    varQuant--;
+                                    if (varQuant > 0) varQuant--;
                                   });
                                 },
                                 child: const Icon(

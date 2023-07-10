@@ -1,3 +1,8 @@
+import 'package:ergo_delivery/screens/Common/chat_screen.dart';
+import 'package:ergo_delivery/screens/Common/history_screen.dart';
+import 'package:ergo_delivery/screens/Common/wallet_screen.dart';
+import 'package:ergo_delivery/screens/vendor/product.dart';
+import 'package:ergo_delivery/screens/vendor/register.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatelessWidget {
@@ -6,16 +11,73 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: 1,
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
-        itemBuilder: (BuildContext context, int index) {
-          if (index % 2 == 0) {
-            return _buildCarousel(context, index ~/ 2);
-          } else {
-            return const Divider();
-          }
-        },
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          children: [
+            const Text('data'),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const RegisterVendor(),
+                  ),
+                );
+              },
+              child: Text('Register Vendor'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const RegisterProduct(),
+                  ),
+                );
+              },
+              child: Text('Register Produto'),
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HistoryScreen(),
+                    ),
+                  );
+                },
+                child: Text('History')),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ChatScreen(),
+                    ),
+                  );
+                },
+                child: Text('Mensagem')),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WalletScreen(),
+                  ),
+                );
+              },
+              child: Text('Carteira'),
+            ),
+            Divider(),
+            ElevatedButton(onPressed: () {}, child: Text('Splash 1')),
+            ElevatedButton(onPressed: () {}, child: Text('Oboarding')),
+            ElevatedButton(onPressed: () {}, child: Text('Sign Up')),
+            ElevatedButton(onPressed: () {}, child: Text('Sign In')),
+            ElevatedButton(
+                onPressed: () {}, child: Text('Setup GPS locations')),
+          ],
+        ),
       ),
     );
   }

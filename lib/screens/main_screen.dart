@@ -1,13 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ergo_delivery/model/place.dart';
+import 'package:ergo_delivery/screens/Client/favourite_screen.dart';
 import 'package:ergo_delivery/screens/Client/vendor_screen.dart';
-import 'package:ergo_delivery/screens/cart_screen.dart';
-import 'package:ergo_delivery/screens/favourite_screen.dart';
+import 'package:ergo_delivery/store/auth_store_controller.dart';
 import 'package:ergo_delivery/widget/local_card.dart';
 import 'package:ergo_delivery/widget/rounded_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class MainScreen extends StatefulWidget {
@@ -18,9 +18,10 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
-  final TextEditingController _searchController = TextEditingController();
   late TabController _tabController;
   int activeTabIndex = 0;
+  final AuthStoreController authStoreController =
+      Get.find<AuthStoreController>();
 
   @override
   void initState() {
@@ -41,10 +42,12 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // var user = authStoreController.auth['user'];
+    // print(user['fullName']);
     return Scaffold(
       backgroundColor: HexColor("#F2F2F2"),
       body: Container(
-        color: HexColor("#FF6339"),
+        color: Theme.of(context).primaryColor,
         child: SafeArea(
           child: Container(
             color: HexColor("#F2F2F2"),
@@ -53,10 +56,12 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: HexColor("#FF6339"),
+                      color: Theme.of(context).primaryColor,
                       borderRadius: BorderRadius.vertical(
                         bottom: Radius.elliptical(
-                            MediaQuery.of(context).size.width, 70.0),
+                          MediaQuery.of(context).size.width,
+                          70.0,
+                        ),
                       ),
                     ),
                     child: Column(children: [
@@ -74,11 +79,25 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                                       'assets/icons/Oval.svg',
                                     ),
                                     const SizedBox(width: 12),
-                                    const Text(
-                                      'Entregar Para: Casa',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
+                                    Obx(
+                                      () => Text(
+                                        'Bem Vindo ${authStoreController.auth['user']['fullName']}',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    )
                                   ],
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, '/cart');
+                                  },
+                                  child: SvgPicture.asset(
+                                    'assets/icons/shopping-cart.svg',
+                                    colorFilter: ColorFilter.mode(
+                                      HexColor("#ffffff").withAlpha(140),
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -87,7 +106,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                             const SizedBox(height: 12),
                             TabBar(
                               controller: _tabController,
-                              indicatorColor: Colors.white,
+                              indicatorColor: Theme.of(context).primaryColor,
                               indicatorSize: TabBarIndicatorSize.label,
                               tabs: [
                                 _buildTabItem('assets/icons/cocktail.svg',
@@ -145,7 +164,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                           items: [1, 2, 3, 4, 5].map((i) {
                             return Builder(
                               builder: (BuildContext context) {
-                                return GestureDetector(
+                                return InkWell(
                                   onTap: () {
                                     Navigator.push(
                                       context,
@@ -199,7 +218,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             icon: SvgPicture.asset(
               'assets/icons/heroicons-solid_home.svg',
               colorFilter: ColorFilter.mode(
-                HexColor("#FF6339"),
+                Theme.of(context).primaryColor,
                 BlendMode.srcIn,
               ),
             ),
@@ -209,7 +228,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               icon: SvgPicture.asset(
                 'assets/icons/heart.svg',
                 colorFilter: ColorFilter.mode(
-                  HexColor("#FF6339"),
+                  Theme.of(context).primaryColor,
                   BlendMode.srcIn,
                 ),
               ),
@@ -218,7 +237,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             icon: SvgPicture.asset(
               'assets/icons/user.svg',
               colorFilter: ColorFilter.mode(
-                HexColor("#FF6339"),
+                Theme.of(context).primaryColor,
                 BlendMode.srcIn,
               ),
             ),
@@ -228,7 +247,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             icon: SvgPicture.asset(
               'assets/icons/ic_sharp-history.svg',
               colorFilter: ColorFilter.mode(
-                HexColor("#FF6339"),
+                Theme.of(context).primaryColor,
                 BlendMode.srcIn,
               ),
             ),
@@ -239,27 +258,16 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           if (value == 0)
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => FavouriteScreen()),
+              MaterialPageRoute(
+                builder: (context) => FavouriteScreen(),
+              ),
             );
-          ;
-          if (value == 1)
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => FavouriteScreen()),
-            );
-          ;
-          if (value == 2)
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Cart_screen()),
-            );
-          ;
-          if (value == 3)
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Cart_screen()),
-            );
-          ;
+
+          if (value == 1) Navigator.pushNamed(context, '/extra');
+
+          if (value == 2) Navigator.pushNamed(context, '/extra');
+
+          if (value == 3) Navigator.pushNamed(context, '/extra');
         },
       ),
     );

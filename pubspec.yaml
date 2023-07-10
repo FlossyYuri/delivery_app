@@ -10,11 +10,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.2
+  flutter_native_splash: ^2.3.1
   hexcolor: ^3.0.1
   carousel_slider: ^4.2.1
   flutter_svg: ^2.0.7
+  http: ^1.1.0
+  get: ^4.6.5
+  url_launcher: ^6.1.12
 
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"
@@ -30,6 +33,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+    - assets/
   #   - images/a_dot_ham.jpeg
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -48,3 +52,8 @@ flutter_launcher_icons:
   macos:
     generate: true
     image_path: "assets/logo.png"
+flutter_native_splash:
+  background_image: "assets/splash.png"
+  android: true
+  ios: true
+  android_gravity: center
