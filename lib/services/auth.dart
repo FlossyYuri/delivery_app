@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 Future<Map<String, dynamic>> postRequest(
     String endpoint, Map<String, dynamic> body) async {
-  var url = Uri.http('192.168.0.101:5000', '/api/v1/$endpoint');
+  var url = Uri.https('ergo.flossyyuri.com', '/api/v1/$endpoint');
 
   var response = await http.post(url, body: body);
   print(url.toString());

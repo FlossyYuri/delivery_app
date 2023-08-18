@@ -134,7 +134,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                     ),
                   );
                   authStoreController.login(response['jsonResponse']);
-                  Navigator.of(context).pushReplacementNamed('/home');
+                  Get.offAllNamed('/home');
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

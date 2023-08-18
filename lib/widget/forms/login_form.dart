@@ -15,7 +15,7 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final AuthStoreController authStoreController =
-      Get.put(AuthStoreController());
+      Get.find<AuthStoreController>();
   final _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> _formValues = {
     'email': '',
@@ -62,7 +62,7 @@ class _LoginFormState extends State<LoginForm> {
           Obx(
             () => AppButton(
               label: "Entrar",
-              isLoading: authStoreController.isLoading.value,
+              isLoading: authStoreController.isLoading.isTrue,
               onClick: () async {
                 authStoreController.updateLoader(true);
                 if (!_formKey.currentState!.validate()) {
@@ -80,7 +80,7 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   );
                   authStoreController.login(response['jsonResponse']);
-                  Navigator.of(context).pushReplacementNamed('/home');
+                  Get.offAllNamed('/home');
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -89,6 +89,9 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   );
                 }
+                Future.delayed(Duration(seconds: 1)).then(
+                  (value) => authStoreController.updateLoader(false),
+                );
               },
             ),
           ),

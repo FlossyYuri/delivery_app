@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -182,7 +183,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.of(context).pushReplacementNamed('/auth/login');
+                      Get.offAllNamed('/auth/login');
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(

@@ -3,6 +3,7 @@ import 'package:ergo_delivery/model/place.dart';
 import 'package:ergo_delivery/screens/Client/favourite_screen.dart';
 import 'package:ergo_delivery/screens/Client/vendor_screen.dart';
 import 'package:ergo_delivery/store/auth_store_controller.dart';
+import 'package:ergo_delivery/widget/common/app_button.dart';
 import 'package:ergo_delivery/widget/local_card.dart';
 import 'package:ergo_delivery/widget/rounded_search_field.dart';
 import 'package:flutter/material.dart';
@@ -204,6 +205,11 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                   const SizedBox(
                     height: 48,
                   ),
+                  AppButton(
+                      onClick: () {
+                        authStoreController.logout();
+                      },
+                      label: 'Logout')
                 ],
               ),
             ),
