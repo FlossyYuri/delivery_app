@@ -26,7 +26,7 @@ class _CreateAccountTabState extends State<CreateAccountTab>
   @override
   void initState() {
     super.initState();
-    _tab2Controller = TabController(vsync: this, length: 2);
+    _tab2Controller = TabController(vsync: this, length: 3);
     _tab2Controller.addListener(() {
       setState(() {
         activeTab2Index = _tab2Controller.index;
@@ -114,6 +114,7 @@ class _CreateAccountTabState extends State<CreateAccountTab>
                           tabs: [
                             _buildTabItem('Cliente', activeTab2Index, 0),
                             _buildTabItem('Motorista', activeTab2Index, 1),
+                            _buildTabItem('Comercio', activeTab2Index, 2),
                           ],
                         ),
                       ),
@@ -173,8 +174,8 @@ Widget _buildTabItem(String text, int currentTab, int tab) {
       style: TextStyle(
         color: currentTab == tab ? Colors.black : Colors.grey.shade400,
         fontWeight: FontWeight.w500,
-        fontSize: 22,
-        letterSpacing: 2,
+        fontSize: 16,
+        letterSpacing: 0.5,
       ),
     ),
   );

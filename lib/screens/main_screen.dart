@@ -82,7 +82,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                                     const SizedBox(width: 12),
                                     Obx(
                                       () => Text(
-                                        'Bem Vindo ${authStoreController.auth['user']['fullName']}',
+                                        'Bem Vindo ${authStoreController.auth["user"]["fullName"]}',
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     )
@@ -206,10 +206,11 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                     height: 48,
                   ),
                   AppButton(
-                      onClick: () {
-                        authStoreController.logout();
-                      },
-                      label: 'Logout')
+                    onClick: () {
+                      authStoreController.logout();
+                    },
+                    label: 'Logout',
+                  ),
                 ],
               ),
             ),

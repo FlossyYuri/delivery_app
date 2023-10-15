@@ -4,6 +4,9 @@ import 'package:ergo_delivery/screens/Client/checkout/rate_screen.dart';
 import 'package:ergo_delivery/screens/Client/checkout/rates_screen.dart';
 import 'package:ergo_delivery/screens/Client/vendor_screen.dart';
 import 'package:ergo_delivery/screens/Client/checkout/cart_screen.dart';
+import 'package:ergo_delivery/screens/Merchant/merchant_screen.dart';
+import 'package:ergo_delivery/screens/Merchant/products/create.dart';
+import 'package:ergo_delivery/screens/Merchant/products/index.dart';
 import 'package:ergo_delivery/screens/OnBoarding/onboarding_screen.dart';
 import 'package:ergo_delivery/screens/Vendor/register.dart';
 import 'package:ergo_delivery/screens/home_page.dart';
@@ -13,9 +16,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   await GetStorage.init();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp());
 }
 
@@ -52,7 +59,14 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => const OnboardingScreen(),
           '/auth/login': (context) => const LoginScreen(),
-          '/home': (context) => const MainScreen(),
+          '/home': (context) => Obx(
+                () => authStoreController.auth['user']['role'] == 'MERCHANT'
+                    ? const MerchantScreen()
+                    : const MainScreen(),
+              ),
+          '/merchant': (context) => const MerchantScreen(),
+          '/merchant/products': (context) => MerchantProducts(),
+          '/merchant/products/create': (context) => const CreateProduct(),
           '/cart': (context) => const CartScreen(),
           '/vendor': (context) => const VendorScreen(),
           '/delivery': (context) => const DeliveryScreen(),

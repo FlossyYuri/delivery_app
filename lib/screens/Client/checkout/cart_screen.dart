@@ -77,7 +77,14 @@ class _CartScreenState extends State<CartScreen> {
                             ],
                           ),
                         ),
-                        child: const CatalogueItem(),
+                        child: const CatalogueItem(
+                          product: {
+                            'name': 'SW 1',
+                            'description': '1 pedaço, 1 batata',
+                            'price': 200,
+                            'photo': '',
+                          },
+                        ),
                       ),
                       const SizedBox(
                         height: 12,

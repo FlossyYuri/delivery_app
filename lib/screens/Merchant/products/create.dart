@@ -1,9 +1,41 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ergo_delivery/widget/common/add_button.dart';
+import 'package:ergo_delivery/widget/forms/create_product_form.dart';
 import 'package:ergo_delivery/widget/layout/SimpleAppBar.dart';
 import 'package:flutter/material.dart';
 
-class RegisterVendor extends StatelessWidget {
-  const RegisterVendor({super.key});
+class CreateProduct extends StatefulWidget {
+  const CreateProduct({super.key});
+
+  @override
+  State<CreateProduct> createState() => _CreateProductState();
+}
+
+class _CreateProductState extends State<CreateProduct> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  registerProduct(
+      GlobalKey<FormState> _key, Map<String, dynamic> _formValues) async {
+    try {
+      // await _firestore
+      //     .collection('establishment')
+      //     .doc(user.user!.uid)
+      //     .set(_formValues);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Produto cadastrado com sucesso!'),
+        ),
+      );
+    } on FirebaseFirestore catch (err) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Erro ao criar conta! Tente novamente mais'),
+        ),
+      );
+      print(err.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +45,7 @@ class RegisterVendor extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Theme.of(context).primaryColor,
           appBar: const SimpleAppBar(
-            title: 'Cadastrar Empresa',
+            title: 'Cadastrar Produto',
             isDark: false,
           ),
           body: Column(
@@ -45,17 +77,19 @@ class RegisterVendor extends StatelessWidget {
                             horizontal: 24,
                             vertical: 24,
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                'Informações do produto',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              const SizedBox(height: 12),
-                              // const CustomTextInput(),
-                              // const CustomTextInput(),
-                            ],
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  'Informações do produto',
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                                const SizedBox(height: 12),
+                                CreateProductForm(submit: registerProduct)
+                              ],
+                            ),
                           ),
                         ),
                       ),

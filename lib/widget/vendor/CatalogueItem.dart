@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class CatalogueItem extends StatefulWidget {
-  const CatalogueItem({super.key});
+  final Map<String, dynamic> product;
+  const CatalogueItem({super.key, required this.product});
 
   @override
   _CatalogueItemState createState() => _CatalogueItemState();
@@ -39,15 +40,15 @@ class _CatalogueItemState extends State<CatalogueItem> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text(
-                  'STREETWISE 2',
+                Text(
+                  widget.product['name'],
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 4),
-                const Text(
-                  '2 PEDAÇOS E 1 BATATA',
+                Text(
+                  widget.product['description'],
                   style: TextStyle(
                     color: Colors.grey,
                     fontWeight: FontWeight.w300,
@@ -58,7 +59,7 @@ class _CatalogueItemState extends State<CatalogueItem> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '280MT',
+                      widget.product['price'].toString(),
                       style: TextStyle(
                         color: HexColor("#FF6339"),
                         fontWeight: FontWeight.bold,
@@ -72,52 +73,52 @@ class _CatalogueItemState extends State<CatalogueItem> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.grey.shade300,
-                          ),
-                          child: Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    if (varQuant > 0) varQuant--;
-                                  });
-                                },
-                                child: const Icon(
-                                  Icons.remove,
-                                  color: Color.fromRGBO(121, 121, 121, 1),
-                                  size: 16,
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                ),
-                                child: Text(
-                                  varQuant.toString(),
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    varQuant++;
-                                  });
-                                },
-                                child: const Icon(
-                                  Icons.add,
-                                  color: Color(0xFFFF6339),
-                                  size: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        // Container(
+                        //   padding: const EdgeInsets.all(3),
+                        //   decoration: BoxDecoration(
+                        //     borderRadius: BorderRadius.circular(5),
+                        //     color: Colors.grey.shade300,
+                        //   ),
+                        //   child: Row(
+                        //     children: [
+                        //       InkWell(
+                        //         onTap: () {
+                        //           setState(() {
+                        //             if (varQuant > 0) varQuant--;
+                        //           });
+                        //         },
+                        //         child: const Icon(
+                        //           Icons.remove,
+                        //           color: Color.fromRGBO(121, 121, 121, 1),
+                        //           size: 16,
+                        //         ),
+                        //       ),
+                        //       Container(
+                        //         margin: const EdgeInsets.symmetric(
+                        //           horizontal: 6,
+                        //         ),
+                        //         child: Text(
+                        //           varQuant.toString(),
+                        //           style: const TextStyle(
+                        //             color: Colors.black,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //       InkWell(
+                        //         onTap: () {
+                        //           setState(() {
+                        //             varQuant++;
+                        //           });
+                        //         },
+                        //         child: const Icon(
+                        //           Icons.add,
+                        //           color: Color(0xFFFF6339),
+                        //           size: 16,
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                       ],
                     ),
                   ],

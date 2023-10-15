@@ -1,8 +1,9 @@
-import 'package:ergo_delivery/services/auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ergo_delivery/store/auth_store_controller.dart';
-import 'package:ergo_delivery/utils/form_validation_api.dart';
-import 'package:ergo_delivery/widget/common/app_button.dart';
-import 'package:ergo_delivery/widget/common/form/CustomTextInput.dart';
+import 'package:ergo_delivery/widget/forms/create_client_form.dart';
+import 'package:ergo_delivery/widget/forms/create_driver_form.dart';
+import 'package:ergo_delivery/widget/forms/create_merchant_form.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -31,124 +32,76 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
       Get.find<AuthStoreController>();
   final passwordController = TextEditingController();
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   setFieldValue(field, value) {
     setState(() {
       _formValues[field] = value;
     });
   }
 
+  registerUser(
+      GlobalKey<FormState> _key, Map<String, dynamic> _formValues) async {
+    try {
+      UserCredential user = await _auth.createUserWithEmailAndPassword(
+          email: _formValues['email'], password: _formValues['password']);
+      _formValues['uid'] = user.user!.uid;
+      _formValues.removeWhere(
+          (key, value) => key == 'password' || key == 'confirmPassword');
+      await _firestore.collection('users').doc(user.user!.uid).set(_formValues);
+
+      if (_formValues['role'] == 'MERCHANT') {
+        var ref = await _firestore.collection('users').doc(user.user!.uid);
+        var establishment = await _firestore.collection('establishment').add({
+          'establishmentName': _formValues['establishmentName'],
+          'activityField': _formValues['activityField'],
+          'description': _formValues['description'],
+          'address': _formValues['description'],
+          'photo': '',
+          'representative': ref
+        });
+        ref.update({
+          'establishmentId': establishment.id,
+          'establishmentName': FieldValue.delete(),
+          'activityField': FieldValue.delete(),
+          'description': FieldValue.delete(),
+          'address': FieldValue.delete(),
+        });
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Conta criada com sucesso!'),
+        ),
+      );
+
+      var registeredUser =
+          await _firestore.collection('users').doc(user.user!.uid).get();
+      await authStoreController.login({
+        'user': registeredUser.data(),
+        'token': await user.user!.getIdToken()
+      });
+      Get.offAllNamed('/home');
+    } on FirebaseAuthException catch (err) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Erro ao criar conta! Tente novamente mais'),
+        ),
+      );
+      print(err.toString());
+    }
+    authStoreController.updateLoader(false);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          CustomTextInput(
-            setFieldValue: setFieldValue,
-            name: 'fullName',
-            label: 'Nome Completo',
-            placeholder: 'Nome Completo',
-            validator: (val) {
-              if (!val!.isValidName) {
-                return 'Nome inválido';
-              }
-            },
-          ),
-          const SizedBox(height: 24),
-          CustomTextInput(
-            setFieldValue: setFieldValue,
-            name: 'phone',
-            label: 'Telefone',
-            placeholder: '8* *** ****',
-            validator: (val) {
-              if (!val!.isValidPhone) {
-                return 'Número inválido';
-              }
-            },
-          ),
-          const SizedBox(height: 24),
-          CustomTextInput(
-            setFieldValue: setFieldValue,
-            name: 'email',
-            label: 'Email',
-            placeholder: 'nome@exemplo.com',
-            validator: (val) {
-              if (!val!.isValidEmail) {
-                return 'Email inválido, escreva novamente';
-              }
-            },
-          ),
-          const SizedBox(height: 24),
-          CustomTextInput(
-            setFieldValue: setFieldValue,
-            name: 'password',
-            label: 'Senha',
-            placeholder: '******',
-            textController: passwordController,
-            validator: (val) {
-              if (!val!.isValidPassword) {
-                return 'Senha fraca, tente outra';
-              }
-            },
-          ),
-          const SizedBox(height: 24),
-          CustomTextInput(
-            setFieldValue: setFieldValue,
-            name: 'confirmPassword',
-            label: 'Confirmar Senha',
-            placeholder: '******',
-            validator: (val) {
-              if (val != passwordController.text) {
-                return 'Senha inválida, digite a mesma senha';
-              }
-              // if (val != _formValues['password']) {
-              //   return 'Senha inválida, digite a mesma senha';
-              // }
-            },
-          ),
-          const SizedBox(height: 24),
-          Obx(
-            () => AppButton(
-              label: "Criar conta",
-              isLoading: authStoreController.isLoading.value,
-              onClick: () async {
-                authStoreController.updateLoader(true);
-                print('in validation');
-                if (!_formKey.currentState!.validate()) {
-                  authStoreController.updateLoader(false);
-                  return;
-                }
-                _formKey.currentState!.save();
-                if (widget.activeTabIndex == 0) {
-                  _formValues['role'] = 'CLIENT';
-                } else {
-                  _formValues['role'] = 'DRIVER';
-                }
-                var response = await postRequest('auth/signup', _formValues);
-                authStoreController.updateLoader(false);
-                if (response['statusCode'] >= 200 &&
-                    response['statusCode'] < 300) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Conta criada com sucesso!'),
-                    ),
-                  );
-                  authStoreController.login(response['jsonResponse']);
-                  Get.offAllNamed('/home');
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content:
-                          Text('Erro ao criar conta! Tente novamente mais'),
-                    ),
-                  );
-                }
-              },
-            ),
-          ),
-          const SizedBox(height: 24),
-        ],
-      ),
-    );
+    if (widget.activeTabIndex == 1) {
+      return CreateDriverForm(submit: registerUser);
+    }
+    if (widget.activeTabIndex == 2) {
+      return CreateMerchantForm(submit: registerUser);
+    }
+    return CreateClientForm(submit: registerUser);
   }
 }
