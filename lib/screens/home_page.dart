@@ -1,8 +1,6 @@
 import 'package:ergo_delivery/screens/Common/chat_screen.dart';
 import 'package:ergo_delivery/screens/Common/history_screen.dart';
 import 'package:ergo_delivery/screens/Common/wallet_screen.dart';
-import 'package:ergo_delivery/screens/vendor/product.dart';
-import 'package:ergo_delivery/screens/vendor/register.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatelessWidget {
@@ -17,28 +15,6 @@ class MyHomePage extends StatelessWidget {
           children: [
             const Text('data'),
             ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const RegisterVendor(),
-                  ),
-                );
-              },
-              child: Text('Register Vendor'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const RegisterProduct(),
-                  ),
-                );
-              },
-              child: Text('Register Produto'),
-            ),
-            ElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -47,7 +23,7 @@ class MyHomePage extends StatelessWidget {
                     ),
                   );
                 },
-                child: Text('History')),
+                child: const Text('History')),
             ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -57,7 +33,7 @@ class MyHomePage extends StatelessWidget {
                     ),
                   );
                 },
-                child: Text('Mensagem')),
+                child: const Text('Mensagem')),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -67,49 +43,16 @@ class MyHomePage extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('Carteira'),
+              child: const Text('Carteira'),
             ),
-            Divider(),
-            ElevatedButton(onPressed: () {}, child: Text('Splash 1')),
-            ElevatedButton(onPressed: () {}, child: Text('Oboarding')),
-            ElevatedButton(onPressed: () {}, child: Text('Sign Up')),
-            ElevatedButton(onPressed: () {}, child: Text('Sign In')),
+            const Divider(),
+            ElevatedButton(onPressed: () {}, child: const Text('Splash 1')),
+            ElevatedButton(onPressed: () {}, child: const Text('Oboarding')),
+            ElevatedButton(onPressed: () {}, child: const Text('Sign Up')),
+            ElevatedButton(onPressed: () {}, child: const Text('Sign In')),
             ElevatedButton(
-                onPressed: () {}, child: Text('Setup GPS locations')),
+                onPressed: () {}, child: const Text('Setup GPS locations')),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCarousel(BuildContext context, int carouselIndex) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Text('Carousel $carouselIndex'),
-        SizedBox(
-          // you may want to use an aspect ratio here for tablet support
-          height: 200.0,
-          child: PageView.builder(
-            // store this controller in a State to save the carousel scroll position
-            controller: PageController(viewportFraction: 0.8),
-            itemBuilder: (BuildContext context, int itemIndex) {
-              return _buildCarouselItem(context, carouselIndex, itemIndex);
-            },
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget _buildCarouselItem(
-      BuildContext context, int carouselIndex, int itemIndex) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.grey,
-          borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),
       ),
     );

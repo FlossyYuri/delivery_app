@@ -57,9 +57,10 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
           'establishmentName': _formValues['establishmentName'],
           'activityField': _formValues['activityField'],
           'description': _formValues['description'],
-          'address': _formValues['description'],
+          'address': _formValues['address'],
+          'categories': [],
           'photo': '',
-          'representative': ref
+          'representativeId': ref.id
         });
         ref.update({
           'establishmentId': establishment.id,

@@ -40,7 +40,7 @@ class _CreateCategoryFormState extends State<CreateCategoryForm> {
             label: 'Nome da Categoria',
             placeholder: '',
             validator: (val) {
-              if (!val!.isValidName) {
+              if (val!.isEmpty) {
                 return 'Nome inválido';
               }
               return null;

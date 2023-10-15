@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ergo_delivery/store/auth_store_controller.dart';
+import 'package:ergo_delivery/utils/index.dart';
 import 'package:ergo_delivery/widget/common/add_button.dart';
 import 'package:ergo_delivery/widget/forms/create_product_form.dart';
 import 'package:ergo_delivery/widget/layout/SimpleAppBar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CreateProduct extends StatefulWidget {
   const CreateProduct({super.key});
@@ -13,20 +16,29 @@ class CreateProduct extends StatefulWidget {
 
 class _CreateProductState extends State<CreateProduct> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final AuthStoreController authStoreController =
+      Get.find<AuthStoreController>();
 
   registerProduct(
       GlobalKey<FormState> _key, Map<String, dynamic> _formValues) async {
     try {
-      // await _firestore
-      //     .collection('establishment')
-      //     .doc(user.user!.uid)
-      //     .set(_formValues);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Produto cadastrado com sucesso!'),
-        ),
+      _formValues['establishmentId'] =
+          authStoreController.auth.value['user']['establishmentId'];
+      _formValues['price'] = double.parse(_formValues['price']);
+      var establishment = _firestore.collection('products').add(_formValues);
+      _key.currentState!.reset();
+      CustomUtils().showCustomDialog(
+        context,
+        'Produto Criado',
+        'O novo produto foi criado com sucesso! Clique ok para voltar para tela de produtos.',
+        'Criar Mais 1',
+        () {},
+        'OK',
+        () {
+          Get.back();
+        },
       );
+      authStoreController.updateLoader(false);
     } on FirebaseFirestore catch (err) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -101,7 +113,7 @@ class _CreateProductState extends State<CreateProduct> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
                 decoration: BoxDecoration(color: Theme.of(context).canvasColor),
-                child: const AddButton(),
+                child: Container(),
               ),
             ],
           ),

@@ -6,6 +6,7 @@ const kPrimaryLightColor = Color.fromARGB(255, 255, 255, 255);
 
 Map<String, dynamic> fieldFromString = {
   ActivityFields.restaurants.toString(): 'Restaurante',
-  ActivityFields.fashion.toString(): 'Restauração',
+  ActivityFields.grocery.toString(): 'Mercado',
   ActivityFields.tecnology.toString(): 'Tecnologia',
+  ActivityFields.fashion.toString(): 'Vestuário',
 };

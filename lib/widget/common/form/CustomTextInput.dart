@@ -6,6 +6,7 @@ class CustomTextInput extends StatelessWidget {
   final String name;
   final String label;
   final String placeholder;
+  final TextInputType keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
   final TextEditingController? textController;
@@ -17,6 +18,7 @@ class CustomTextInput extends StatelessWidget {
     required this.label,
     this.placeholder = '',
     this.inputFormatters,
+    this.keyboardType = TextInputType.text,
     this.textController,
     this.validator,
   });
@@ -35,6 +37,7 @@ class CustomTextInput extends StatelessWidget {
           style: TextStyle(color: Colors.grey.shade800),
           cursorColor: Theme.of(context).secondaryHeaderColor,
           controller: textController,
+          keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: placeholder,
             hintStyle: Theme.of(context)

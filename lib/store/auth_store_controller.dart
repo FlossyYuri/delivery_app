@@ -19,12 +19,21 @@ class AuthStoreController extends GetxController {
     if (payload['user']['role'] == 'MERCHANT') {
       var establishmentRef = _firestore
           .collection('establishment')
-          .doc(auth.value['user']['establishmentId'].toString());
-      var est = (await establishmentRef.get()).data();
-      user['establishment'] = est;
+          .doc(user['user']['establishmentId']);
+      var est = await establishmentRef.get();
+      user['establishment'] = est.data();
     }
-    print(user['user'].toString());
     auth = user.obs;
+    _persistData();
+  }
+
+  Future<void> updateEstablishment() async {
+    var establishmentRef = _firestore
+        .collection('establishment')
+        .doc(auth.value['user']['establishmentId']);
+    var est = await establishmentRef.get();
+    auth.value['establishment'] = est.data();
+    auth.refresh();
     _persistData();
   }
 
@@ -36,7 +45,8 @@ class AuthStoreController extends GetxController {
   }
 
   void updateLoader(bool payload) {
-    isLoading = payload.obs;
+    isLoading.value = payload;
+    isLoading.refresh();
   }
 
   void _persistData() {

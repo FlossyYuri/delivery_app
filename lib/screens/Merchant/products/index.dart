@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ergo_delivery/enums/ButtonTypes.dart';
 import 'package:ergo_delivery/store/auth_store_controller.dart';
+import 'package:ergo_delivery/utils/index.dart';
 import 'package:ergo_delivery/widget/common/app_button.dart';
 import 'package:ergo_delivery/widget/vendor/CatalogueItem.dart';
 import 'package:flutter/material.dart';
@@ -8,78 +9,27 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-final List<Map<String, dynamic>> categories = [
-  {
-    "name": "Streetwise",
-    "products": [
-      {
-        'name': 'SW 1',
-        'description': '1 pedaço, 1 batata',
-        'price': 200,
-        'photo': '',
-      },
-      {
-        'name': 'SW 2',
-        'description': '2 pedaço, 1 batata',
-        'price': 200,
-        'photo': '',
-      },
-      {
-        'name': 'SW 3',
-        'description': '3 pedaço, 1 batata',
-        'price': 200,
-        'photo': '',
-      },
-    ]
-  },
-  {
-    "name": "Sobremesa",
-    "products": [
-      {
-        'name': 'Krusher',
-        'description': 'Batido de sorvete e oreo',
-        'price': 130,
-      },
-      {
-        'name': 'Milkshake',
-        'description': 'shake de chocolate',
-        'price': 200,
-        'photo': '',
-      },
-    ]
-  },
-  {
-    "name": "Burgers",
-    "products": [
-      {
-        'name': 'Double Cheeseburger',
-        'description': '1 pedaço, 1 batata',
-        'price': 200,
-        'photo': '',
-      },
-      {
-        'name': 'Deluxe Burger',
-        'description': '2 pedaço, 1 batata',
-        'price': 300,
-        'photo': '',
-      },
-      {
-        'name': 'Tower Burger',
-        'description': '3 pedaço, 1 batata',
-        'price': 400,
-        'photo': '',
-      },
-    ]
-  },
-];
-
 class MerchantProducts extends StatelessWidget {
   MerchantProducts({super.key});
 
   final AuthStoreController authStoreController =
       Get.find<AuthStoreController>();
-  final selectedCategory = (categories.first['name'] as String).obs;
-  final products = <Map<String, dynamic>>[...categories.first['products']].obs;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final selectedCategory = ''.obs;
+  final products = <Map<String, dynamic>>[].obs;
+
+  setProducts(String category) async {
+    authStoreController.updateLoader(true);
+    var queriedProducts = await _firestore
+        .collection('products')
+        .where('establishmentId',
+            isEqualTo: authStoreController.auth.value['user']
+                ['establishmentId'])
+        .where('category', isEqualTo: category)
+        .get();
+    products.assignAll(queriedProducts.docs.map((e) => e.data()).toList());
+    authStoreController.updateLoader(false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,19 +46,24 @@ class MerchantProducts extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 24),
-                  const Text(
-                    "KFC",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
+                  Obx(
+                    () => Text(
+                      authStoreController.auth['establishment']
+                          ['establishmentName'],
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    "Frango Panado - Batata",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16,
+                  Obx(
+                    () => Text(
+                      authStoreController.auth['establishment']['description'],
+                      style: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -151,10 +106,35 @@ class MerchantProducts extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   AppButton(
-                    onClick: () {},
+                    onClick: () {
+                      Get.toNamed('/merchant/products/createCategory');
+                    },
                     label: "Adicionar nova categoria",
                     type: ButtonTypes.outlined,
                   ),
+                  Obx(() {
+                    if (authStoreController
+                            .auth.value['establishment']['categories'].length ==
+                        0) {
+                      return Container();
+                    }
+                    if (selectedCategory.value.isEmpty) {
+                      return Column(
+                        children: [
+                          const SizedBox(height: 24),
+                          Center(
+                              child: Text(
+                            "Selecione uma categoria",
+                            style: TextStyle(
+                              fontSize: 22,
+                              color: Colors.grey.shade600,
+                            ),
+                          )),
+                        ],
+                      );
+                    }
+                    return Container();
+                  }),
                   Container(
                     margin: const EdgeInsets.only(
                       top: 24,
@@ -178,51 +158,65 @@ class MerchantProducts extends StatelessWidget {
                     ),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: categories
-                            .map(
-                              (category) => Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 24),
-                                child: InkWell(
-                                  onTap: () {
-                                    products.assignAll(category['products']);
-                                    selectedCategory.value = category['name'];
-                                  },
-                                  child: Obx(
-                                    () => Text(
-                                      category['name'],
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: selectedCategory.value ==
-                                                category['name']
-                                            ? FontWeight.bold
-                                            : FontWeight.normal,
+                      child: Obx(() {
+                        var categories = listDynamicToListString(
+                            authStoreController.auth.value['establishment']
+                                ['categories']);
+                        if (categories.length == 0) {
+                          return Container();
+                        }
+                        return Row(
+                          children: categories
+                              .map(
+                                (category) => Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 24),
+                                  child: InkWell(
+                                    onTap: () {
+                                      setProducts(category);
+                                      selectedCategory.value = category;
+                                    },
+                                    child: Obx(
+                                      () => Text(
+                                        category,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight:
+                                              selectedCategory.value == category
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            )
-                            .toList(),
-                      ),
+                              )
+                              .toList(),
+                        );
+                      }),
                     ),
                   ),
                   Obx(
-                    () => Column(
-                      children: [
-                        ...products.value
-                            .map(
-                              (product) => Column(
-                                children: [
-                                  CatalogueItem(product: product),
-                                  const SizedBox(height: 12),
-                                ],
-                              ),
-                            )
-                            .toList(),
-                      ],
-                    ),
+                    () => authStoreController.isLoading.value
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Column(
+                            children: [
+                              ...products.value
+                                  .map(
+                                    (product) => Column(
+                                      children: [
+                                        CatalogueItem(product: product),
+                                        const SizedBox(height: 12),
+                                      ],
+                                    ),
+                                  )
+                                  .toList(),
+                              if (products.value.isEmpty)
+                                const Center(child: Text("Nenhum Produto"))
+                            ],
+                          ),
                   ),
                 ],
               ),

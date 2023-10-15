@@ -4,11 +4,12 @@ import 'package:ergo_delivery/screens/Client/checkout/rate_screen.dart';
 import 'package:ergo_delivery/screens/Client/checkout/rates_screen.dart';
 import 'package:ergo_delivery/screens/Client/vendor_screen.dart';
 import 'package:ergo_delivery/screens/Client/checkout/cart_screen.dart';
+import 'package:ergo_delivery/screens/Driver/driver_screen.dart';
 import 'package:ergo_delivery/screens/Merchant/merchant_screen.dart';
 import 'package:ergo_delivery/screens/Merchant/products/create.dart';
+import 'package:ergo_delivery/screens/Merchant/products/createCategory.dart';
 import 'package:ergo_delivery/screens/Merchant/products/index.dart';
 import 'package:ergo_delivery/screens/OnBoarding/onboarding_screen.dart';
-import 'package:ergo_delivery/screens/Vendor/register.dart';
 import 'package:ergo_delivery/screens/home_page.dart';
 import 'package:ergo_delivery/screens/main_screen.dart';
 import 'package:ergo_delivery/store/auth_store_controller.dart';
@@ -59,21 +60,27 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => const OnboardingScreen(),
           '/auth/login': (context) => const LoginScreen(),
-          '/home': (context) => Obx(
-                () => authStoreController.auth['user']['role'] == 'MERCHANT'
-                    ? const MerchantScreen()
-                    : const MainScreen(),
-              ),
+          '/home': (context) => Obx(() {
+                switch (authStoreController.auth['user']['role']) {
+                  case 'MERCHANT':
+                    return const MerchantScreen();
+                  case 'DRIVER':
+                    return const DriverScreen();
+                  default:
+                    return const MainScreen();
+                }
+              }),
+          '/driver': (context) => const MerchantScreen(),
           '/merchant': (context) => const MerchantScreen(),
           '/merchant/products': (context) => MerchantProducts(),
           '/merchant/products/create': (context) => const CreateProduct(),
+          '/merchant/products/createCategory': (context) =>
+              const CreateCategory(),
           '/cart': (context) => const CartScreen(),
           '/vendor': (context) => const VendorScreen(),
           '/delivery': (context) => const DeliveryScreen(),
           '/rate': (context) => const RateScreen(),
           '/rates': (context) => const RatesScreen(),
-          '/vendor/register': (context) => const RegisterVendor(),
-          '/vendor/product': (context) => const RegisterVendor(),
           '/extra': (context) => const MyHomePage(),
         },
       ),
