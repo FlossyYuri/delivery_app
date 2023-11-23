@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:ergo_delivery/model/place.dart';
-import 'package:ergo_delivery/screens/Client/favourite_screen.dart';
 import 'package:ergo_delivery/screens/Client/vendor_screen.dart';
 import 'package:ergo_delivery/store/auth_store_controller.dart';
+import 'package:ergo_delivery/store/client_store_controller.dart';
+import 'package:ergo_delivery/widget/bottom_navigation.dart';
 import 'package:ergo_delivery/widget/common/app_button.dart';
 import 'package:ergo_delivery/widget/local_card.dart';
 import 'package:ergo_delivery/widget/rounded_search_field.dart';
@@ -23,6 +23,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   int activeTabIndex = 0;
   final AuthStoreController authStoreController =
       Get.find<AuthStoreController>();
+  final ClientStoreController clientStoreController =
+      Get.find<ClientStoreController>();
 
   @override
   void initState() {
@@ -83,7 +85,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                                     Obx(
                                       () => Text(
                                         'Bem Vindo ${authStoreController.auth["user"]["fullName"]}',
-                                        style: TextStyle(color: Colors.white),
+                                        style: const TextStyle(
+                                            color: Colors.white),
                                       ),
                                     )
                                   ],
@@ -139,7 +142,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                   //   ],
                   // ),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -154,46 +158,55 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                           height: 12,
                         ),
                         //LocalCardView(place: Place(1, "name", 1, 1, 1))
-                        CarouselSlider(
-                          options: CarouselOptions(
-                            viewportFraction: 0.8,
-                            enableInfiniteScroll: false,
-                            disableCenter: true,
-                            padEnds: false,
-                            reverse: false,
-                          ),
-                          items: [1, 2, 3, 4, 5].map((i) {
-                            return Builder(
-                              builder: (BuildContext context) {
-                                return InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const VendorScreen(),
+                        FutureBuilder(
+                          future: clientStoreController
+                              .getEstablishmetsByActivity(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            return CarouselSlider(
+                              options: CarouselOptions(
+                                viewportFraction: 0.8,
+                                enableInfiniteScroll: false,
+                                disableCenter: true,
+                                padEnds: false,
+                                reverse: false,
+                              ),
+                              items: snapshot.data!.map((establishment) {
+                                return Builder(
+                                  builder: (BuildContext context) {
+                                    return InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => VendorScreen(
+                                              establishment: establishment,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        margin:
+                                            const EdgeInsets.only(right: 12),
+                                        child: LocalCardView(
+                                          place: establishment,
+                                        ),
                                       ),
                                     );
                                   },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(8)),
-                                    margin: const EdgeInsets.only(right: 12),
-                                    child: LocalCardView(
-                                      place: Place(
-                                        1,
-                                        "Frango Panado - Batata",
-                                        1,
-                                        1,
-                                        1,
-                                      ),
-                                    ),
-                                  ),
                                 );
-                              },
+                              }).toList(),
                             );
-                          }).toList(),
+                          },
                         )
                       ],
                     ),
@@ -217,66 +230,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.red,
-        elevation: 0,
-        items: [
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/icons/heroicons-solid_home.svg',
-              colorFilter: ColorFilter.mode(
-                Theme.of(context).primaryColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/heart.svg',
-                colorFilter: ColorFilter.mode(
-                  Theme.of(context).primaryColor,
-                  BlendMode.srcIn,
-                ),
-              ),
-              label: ''),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/icons/user.svg',
-              colorFilter: ColorFilter.mode(
-                Theme.of(context).primaryColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/icons/ic_sharp-history.svg',
-              colorFilter: ColorFilter.mode(
-                Theme.of(context).primaryColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            label: '',
-          )
-        ],
-        onTap: (value) {
-          if (value == 0)
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => FavouriteScreen(),
-              ),
-            );
-
-          if (value == 1) Navigator.pushNamed(context, '/extra');
-
-          if (value == 2) Navigator.pushNamed(context, '/extra');
-
-          if (value == 3) Navigator.pushNamed(context, '/extra');
-        },
-      ),
+      bottomNavigationBar: const ClientBottomNavigation(),
     );
   }
 }

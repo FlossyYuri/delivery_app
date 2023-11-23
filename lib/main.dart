@@ -1,9 +1,8 @@
 import 'package:ergo_delivery/screens/Auth/login_screen.dart';
+import 'package:ergo_delivery/screens/Client/checkout/cart_screen.dart';
 import 'package:ergo_delivery/screens/Client/checkout/delivery_screen.dart';
 import 'package:ergo_delivery/screens/Client/checkout/rate_screen.dart';
 import 'package:ergo_delivery/screens/Client/checkout/rates_screen.dart';
-import 'package:ergo_delivery/screens/Client/vendor_screen.dart';
-import 'package:ergo_delivery/screens/Client/checkout/cart_screen.dart';
 import 'package:ergo_delivery/screens/Driver/driver_screen.dart';
 import 'package:ergo_delivery/screens/Merchant/merchant_screen.dart';
 import 'package:ergo_delivery/screens/Merchant/products/create.dart';
@@ -13,11 +12,13 @@ import 'package:ergo_delivery/screens/OnBoarding/onboarding_screen.dart';
 import 'package:ergo_delivery/screens/home_page.dart';
 import 'package:ergo_delivery/screens/main_screen.dart';
 import 'package:ergo_delivery/store/auth_store_controller.dart';
+import 'package:ergo_delivery/store/client_store_controller.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'firebase_options.dart';
 
 void main() async {
@@ -32,6 +33,8 @@ class MyApp extends StatelessWidget {
 
   final AuthStoreController authStoreController =
       Get.put(AuthStoreController());
+  final ClientStoreController clientStoreController =
+      Get.put(ClientStoreController());
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +80,6 @@ class MyApp extends StatelessWidget {
           '/merchant/products/createCategory': (context) =>
               const CreateCategory(),
           '/cart': (context) => const CartScreen(),
-          '/vendor': (context) => const VendorScreen(),
           '/delivery': (context) => const DeliveryScreen(),
           '/rate': (context) => const RateScreen(),
           '/rates': (context) => const RatesScreen(),

@@ -1,3 +1,4 @@
+import 'package:ergo_delivery/enums/ActivityFields.dart';
 import 'package:flutter/material.dart';
 
 class CustomUtils {
@@ -141,4 +142,11 @@ class CustomUtils {
 
 List<String> listDynamicToListString(List<dynamic> list) {
   return list.map((e) => e as String).toList();
+}
+
+ActivityFields stringToActivityEnum(String input) {
+  return ActivityFields.values.firstWhere(
+    (e) => e.toString() == input,
+    orElse: () => ActivityFields.restaurants,
+  );
 }

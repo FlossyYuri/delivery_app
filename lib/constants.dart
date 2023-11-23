@@ -10,3 +10,5 @@ Map<String, dynamic> fieldFromString = {
   ActivityFields.tecnology.toString(): 'Tecnologia',
   ActivityFields.fashion.toString(): 'Vestuário',
 };
+
+const establishmentCollection = 'establishment';

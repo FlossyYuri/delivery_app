@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LocalCardView extends StatelessWidget {
-  const LocalCardView(
-      {Key? key,
-      required this.place,
-      this.imageAlignment = Alignment.bottomCenter,
-      this.onTap})
-      : super(key: key);
+  const LocalCardView({
+    Key? key,
+    required this.place,
+    this.imageAlignment = Alignment.bottomCenter,
+    this.onTap,
+  }) : super(key: key);
 
-  final Place place;
+  final Establishment place;
   final Alignment imageAlignment;
   final Function(String)? onTap;
 
@@ -39,17 +39,17 @@ class LocalCardView extends StatelessWidget {
           ),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const Text(
-              'KFC',
+            Text(
+              place.establishmentName ?? '',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             const SizedBox(
               height: 4,
             ),
             Text(
-              '${place.name}',
+              '${place.description}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               softWrap: false,
@@ -57,21 +57,21 @@ class LocalCardView extends StatelessWidget {
                 color: Colors.grey.shade500,
               ),
             ),
-            const SizedBox(
-              height: 4,
-            ),
-            Row(
-              children: [
-                SvgPicture.asset('assets/icons/star.svg'),
-                const SizedBox(
-                  width: 8,
-                ),
-                const Text(
-                  "4.0 (2)",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
+            // const SizedBox(
+            //   height: 4,
+            // ),
+            // Row(
+            //   children: [
+            //     SvgPicture.asset('assets/icons/star.svg'),
+            //     const SizedBox(
+            //       width: 8,
+            //     ),
+            //     const Text(
+            //       "4.0 (2)",
+            //       style: TextStyle(fontWeight: FontWeight.bold),
+            //     )
+            //   ],
+            // ),
           ]),
         )
       ]),

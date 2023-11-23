@@ -1,10 +1,11 @@
-import 'package:ergo_delivery/widget/vendor/CatalogueItem.dart';
+import 'package:ergo_delivery/model/place.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class VendorScreen extends StatefulWidget {
-  const VendorScreen({super.key});
+  Establishment establishment;
+  VendorScreen({super.key, required this.establishment});
 
   @override
   State<VendorScreen> createState() => _VendorScreenState();
@@ -14,7 +15,6 @@ class _VendorScreenState extends State<VendorScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
   int activeCategoryIndex = 0;
-  final List<String> categories = ["Streetwise", "Wraps", "Burgers"];
 
   @override
   void initState() {
@@ -62,17 +62,17 @@ class _VendorScreenState extends State<VendorScreen>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "KFC",
-                          style: TextStyle(
+                        Text(
+                          widget.establishment.establishmentName ?? '',
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
                         ),
                         const SizedBox(height: 8),
-                        const Text(
-                          "Frango Panado - Batata",
-                          style: TextStyle(
+                        Text(
+                          widget.establishment.description ?? '',
+                          style: const TextStyle(
                             fontWeight: FontWeight.normal,
                             fontSize: 12,
                           ),
@@ -129,8 +129,9 @@ class _VendorScreenState extends State<VendorScreen>
                             ),
                           ),
                           child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
                             child: Row(
-                              children: categories
+                              children: widget.establishment.categories!
                                   .map(
                                     (category) => Container(
                                       margin:
