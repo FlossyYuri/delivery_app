@@ -1,151 +1,236 @@
-import 'package:delivery_app/model/place.dart';
-import 'package:delivery_app/screens/cart_screen.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:flutter/material.dart';
-import 'package:delivery_app/widget/rounded_search_field.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:delivery_app/widget/local_card.dart';
-import 'package:delivery_app/screens/home_page.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:delivery_app/screens/favourite_screen.dart';
+import 'package:ergo_delivery/screens/Client/vendor_screen.dart';
+import 'package:ergo_delivery/store/auth_store_controller.dart';
+import 'package:ergo_delivery/store/client_store_controller.dart';
+import 'package:ergo_delivery/widget/bottom_navigation.dart';
+import 'package:ergo_delivery/widget/common/app_button.dart';
+import 'package:ergo_delivery/widget/local_card.dart';
+import 'package:ergo_delivery/widget/rounded_search_field.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:hexcolor/hexcolor.dart';
 
-class Main_Screen extends StatefulWidget {
-  const Main_Screen({super.key});
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
 
   @override
-  State<Main_Screen> createState() => _Main_ScreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _Main_ScreenState extends State<Main_Screen> {
-  final TextEditingController _searchController = TextEditingController();
+class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
+  late TabController _tabController;
+  int activeTabIndex = 0;
+  final AuthStoreController authStoreController =
+      Get.find<AuthStoreController>();
+  final ClientStoreController clientStoreController =
+      Get.find<ClientStoreController>();
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(vsync: this, length: 3);
+    _tabController.addListener(() {
+      setState(() {
+        activeTabIndex = _tabController.index;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    // var user = authStoreController.auth['user'];
+    // print(user['fullName']);
     return Scaffold(
       backgroundColor: HexColor("#F2F2F2"),
-      body: Column(
-        children: [
-          Container(
-            height: 290,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [HexColor("#FF6339"), Colors.deepOrange],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              boxShadow: const [BoxShadow(blurRadius: 40.0)],
-              borderRadius: BorderRadius.vertical(
-                  bottom: Radius.elliptical(
-                      MediaQuery.of(context).size.width, 100.0)),
-            ),
-            child: Padding(
-                padding: const EdgeInsets.only(top: 80, left: 10),
-                child: Column(
-                  children: [
-                    Row(
-                      children: const [
-                        Icon(Icons.location_on, color: Colors.white),
-                        Text(
-                          'Entregar Para: Casa',
-                          style: TextStyle(color: Colors.white),
+      body: Container(
+        color: Theme.of(context).primaryColor,
+        child: SafeArea(
+          child: Container(
+            color: HexColor("#F2F2F2"),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.vertical(
+                        bottom: Radius.elliptical(
+                          MediaQuery.of(context).size.width,
+                          70.0,
                         ),
-                      ],
+                      ),
                     ),
-                    Row(
+                    child: Column(children: [
+                      const SizedBox(height: 32),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/icons/Oval.svg',
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Obx(
+                                      () => Text(
+                                        'Bem Vindo ${authStoreController.auth["user"]["fullName"]}',
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, '/cart');
+                                  },
+                                  child: SvgPicture.asset(
+                                    'assets/icons/shopping-cart.svg',
+                                    colorFilter: ColorFilter.mode(
+                                      HexColor("#ffffff").withAlpha(140),
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            RoundedSearchField(onChanged: (value) {}),
+                            const SizedBox(height: 12),
+                            TabBar(
+                              controller: _tabController,
+                              indicatorColor: Theme.of(context).primaryColor,
+                              indicatorSize: TabBarIndicatorSize.label,
+                              tabs: [
+                                _buildTabItem('assets/icons/cocktail.svg',
+                                    'Restaurantes', activeTabIndex, 0),
+                                _buildTabItem('assets/icons/bag.svg',
+                                    'Vestuário', activeTabIndex, 1),
+                                _buildTabItem('assets/icons/laptop.svg',
+                                    'Tecnologia', activeTabIndex, 2),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 32,
+                            )
+                          ],
+                        ),
+                      )
+                    ]),
+                  ),
+                  // TabBarView(
+                  //   children: [
+                  //     // Content of Tab 1
+                  //     Center(child: Text('Tab 1 Content')),
+
+                  //     // Content of Tab 2
+                  //     Center(child: Text('Tab 2 Content')),
+
+                  //     // Content of Tab 3
+                  //     Center(child: Text('Tab 3 Content')),
+                  //   ],
+                  // ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          padding:
-                              EdgeInsets.only(top: 15, right: 20, left: 20),
-                          child: Flexible(
-                              child: RoundedSearchField(onChanged: (value) {})),
-                          width: MediaQuery.of(context).size.width * 0.96,
+                        const Text(
+                          "Melhor Avaliação",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        //LocalCardView(place: Place(1, "name", 1, 1, 1))
+                        FutureBuilder(
+                          future: clientStoreController
+                              .getEstablishmetsByActivity(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            return CarouselSlider(
+                              options: CarouselOptions(
+                                viewportFraction: 0.8,
+                                enableInfiniteScroll: false,
+                                disableCenter: true,
+                                padEnds: false,
+                                reverse: false,
+                              ),
+                              items: snapshot.data!.map((establishment) {
+                                return Builder(
+                                  builder: (BuildContext context) {
+                                    return InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => VendorScreen(
+                                              establishment: establishment,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        margin:
+                                            const EdgeInsets.only(right: 12),
+                                        child: LocalCardView(
+                                          place: establishment,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }).toList(),
+                            );
+                          },
                         )
                       ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _buildButtonColumn(
-                              Colors.white, Icons.food_bank, 'Restaurantes'),
-                          _buildButtonColumn(
-                              Colors.white, Icons.shop, 'Vesrtiario'),
-                          _buildButtonColumn(
-                              Colors.white, Icons.computer, 'Tecnologia'),
-                        ],
-                      ),
-                    )
-                  ],
-                )),
-          ),
-          Column(
-            children: [
-              Padding(
-                padding:
-                    EdgeInsets.only(top: 40, left: 10, right: 40, bottom: 20),
-                child: Row(
-                  children: [Text("Melhor Avaliação",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),)],
-                ),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  Image.asset('assets/images/banner.png'),
+                  const SizedBox(
+                    height: 48,
+                  ),
+                  AppButton(
+                    onClick: () {
+                      authStoreController.logout();
+                    },
+                    label: 'Logout',
+                  ),
+                ],
               ),
-              //LocalCardView(place: Place(1, "name", 1, 1, 1))
-              CarouselSlider(
-  options: CarouselOptions(height: 200.0),
-  items: [1,2,3,4,5].map((i) {
-    return Builder(
-      builder: (BuildContext context) {
-        return Container(
-          width: 260,
-          margin: EdgeInsets.symmetric(horizontal: 5.0),
-          decoration: BoxDecoration(
-            color: Colors.white
-          ),
-          child: LocalCardView(place: Place(1, "Frango Panado - Batata", 1, 1, 1))
-        );
-      },
-    );
-  }).toList(),
-)
-              
-            ],
-          )
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(currentIndex: 1, items: [
-        BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: HexColor("#FF6339"),
             ),
-            label: ''),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_outline, color: HexColor("#50555C")),
-            label: ''),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.person, color: HexColor("#50555C")), label: ''),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.timelapse_rounded, color: HexColor("#50555C")),
-            label: '')
-      ],
-      onTap: (value) {
-        if (value == 0) Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) =>  FavouriteScreen()),
-  );;
-        if (value == 1) Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => FavouriteScreen()),
-  );;
-        if (value == 2) Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => Cart_screen()),
-  );;
-  if (value == 3) Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => Cart_screen()),
-  );;
-      },),
+          ),
+        ),
+      ),
+      bottomNavigationBar: const ClientBottomNavigation(),
     );
   }
 }
@@ -194,12 +279,44 @@ Widget _buildCarousel(BuildContext context, int carouselIndex) {
 Widget _buildCarouselItem(
     BuildContext context, int carouselIndex, int itemIndex) {
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 4.0),
+    padding: const EdgeInsets.symmetric(horizontal: 4.0),
     child: Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.grey,
-        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+        borderRadius: BorderRadius.all(
+          Radius.circular(4.0),
+        ),
       ),
+    ),
+  );
+}
+
+Widget _buildTabItem(String asset, String text, int currentTab, int tab) {
+  return Tab(
+    height: 68,
+    child: Column(
+      children: [
+        SvgPicture.asset(
+          asset,
+          colorFilter: ColorFilter.mode(
+            currentTab == tab ? Colors.white : Colors.white.withAlpha(200),
+            BlendMode.srcIn,
+          ),
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Text(
+          text,
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: currentTab == tab ? FontWeight.w400 : FontWeight.w300,
+          ),
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+      ],
     ),
   );
 }

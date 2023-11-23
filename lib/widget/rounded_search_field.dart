@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:delivery_app/widget/text_field.dart';
-import 'package:delivery_app/constants.dart';
+import 'package:ergo_delivery/widget/text_field.dart';
+import 'package:ergo_delivery/constants.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class RoundedSearchField extends StatelessWidget {
   final ValueChanged<String> onChanged;
@@ -16,12 +17,9 @@ class RoundedSearchField extends StatelessWidget {
         obscureText: false,
         onChanged: onChanged,
         cursorColor: kPrimaryColor,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           hintText: "Procurar",
-          icon: Icon(
-            Icons.search,
-            color: kPrimaryColor,
-          ),
+          icon: SvgPicture.asset('assets/icons/search.svg'),
           border: InputBorder.none,
         ),
       ),

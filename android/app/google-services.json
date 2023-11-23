@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1078504427169",
+    "project_id": "ergo-delivery",
+    "storage_bucket": "ergo-delivery.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1078504427169:android:26aed0d2f67805c09e6ae0",
+        "android_client_info": {
+          "package_name": "com.flossyyuri.ergo_delivery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClpSXtvN58lSDgYQowABIKD9COUsKZnyc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
